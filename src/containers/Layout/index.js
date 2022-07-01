@@ -41,7 +41,7 @@ const Layout = () => {
 	 */
 	useEffect(() => {
 		setProducts([]);
-		setPage(searchTerm ? 1 : null);
+		setPage(searchTerm ? 0 : null);
 	}, [searchTerm]);
 
 	/**
@@ -59,7 +59,7 @@ const Layout = () => {
 	 * This useEffect is used to call api and set products data. This will call when there is change in state called page
 	 */
 	useEffect(() => {
-		if (page && searchTerm) {
+		if (page >= 0 && searchTerm) {
 			setIsLoading(true);
 			call({
 				page,
