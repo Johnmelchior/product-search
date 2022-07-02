@@ -39,7 +39,7 @@ app.use(
     '/service/blibliserver',
     {
       target: 'https://www.blibli.com',
-      headers: {Host: 'localhost', referer: 'http://localhost'},
+      headers: {authority: 'www.blibli.com', referer: ''},
       on : {
         proxyReq: (proxyReq, req, res) => {
           proxyReq.setHeader('Origin', 'https://www.blibli.com')
