@@ -1,4 +1,6 @@
 const proxy = require("express-http-proxy");
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
 const express = require('express'),
   path = require('path'),
   app = express(),
@@ -9,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../build')));
 
-app.use(
+/*app.use(
   "/service/blibliserver",
   proxy("https://www.blibli.com", {
     proxyReqOptDecorator(proxyReqOpts) {
@@ -21,7 +23,7 @@ app.use(
       next(err);
     }
   })
-)
+)*/
 
 /*app.get('/backend/search/products', (req, res) => {
   const json = req.query;
@@ -31,6 +33,25 @@ app.use(
       res.json(res1);
     }, (error) => console.error(error));
 });*/
+
+app.use(
+  createProxyMiddleware(
+    '/service/blibliserver',
+    {
+      target: 'https://www.blibli.com',
+      on : {
+        proxyReq: (proxyReq, req, res) => {
+          proxyReq.setHeader('Origin', 'https://www.blibli.com')
+        },
+      },
+      pathRewrite: {
+        '^/service/blibliserver': '', // rewrite path
+      },
+      changeOrigin: true,
+      secure: false
+    }
+  )
+);
 
 app.listen(port, () => {
   console.log(`Server listening on the port::${port}`);
