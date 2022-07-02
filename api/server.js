@@ -42,7 +42,7 @@ app.use(
       headers: {authority: 'www.blibli.com', referer: ''},
       on : {
         proxyReq: (proxyReq, req, res) => {
-          proxyReq.setHeader('Origin', 'https://www.blibli.com')
+          proxyReq.setHeader('Origin', 'https://honest-mountie-54439.herokuapp.com')
           proxyReq.setHeader("Host", "https://www.blibli.com");
         },
       },
