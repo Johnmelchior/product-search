@@ -43,12 +43,14 @@ app.use(
       on : {
         proxyReq: (proxyReq, req, res) => {
           proxyReq.setHeader('Origin', 'https://www.blibli.com')
+          proxyReq.setHeader("Referer", "");
         },
       },
       pathRewrite: {
         '^/service/blibliserver': '', // rewrite path
       },
       changeOrigin: true,
+      logger: console,
       secure: false
     }
   )
