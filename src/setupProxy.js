@@ -10,6 +10,7 @@ module.exports = function (app) {
           '^/service/blibliserver': '', // rewrite path
         },
         changeOrigin: true,
+        secure: false
       }
     )
   );
