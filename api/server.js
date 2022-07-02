@@ -42,6 +42,8 @@ app.use(
       on : {
         proxyReq: (proxyReq, req, res) => {
           proxyReq.setHeader('Origin', 'https://www.blibli.com')
+          proxyReq.setHeader('Host', 'localhost')
+          proxyReq.setHeader('Referer', 'http://localhost')
         },
       },
       pathRewrite: {
