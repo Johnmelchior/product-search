@@ -7,6 +7,8 @@ const express = require('express'),
   bodyParser = require("body-parser"),
   port = process.env.PORT || 3070;
 
+const origin = process.env.ORIGIN || "*";
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../build')));
@@ -33,6 +35,10 @@ app.use(express.static(path.join(__dirname, '../build')));
       res.json(res1);
     }, (error) => console.error(error));
 });*/
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", origin);
+  next();
+});
 
 app.use(
   createProxyMiddleware(
@@ -42,8 +48,7 @@ app.use(
       headers: {authority: 'www.blibli.com', referer: ''},
       on : {
         proxyReq: (proxyReq, req, res) => {
-          proxyReq.setHeader('Origin', 'https://honest-mountie-54439.herokuapp.com')
-          proxyReq.setHeader("Host", "https://www.blibli.com");
+          proxyReq.setHeader('Origin', 'https://www.blibli.com');
         },
       },
       pathRewrite: {
