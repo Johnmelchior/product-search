@@ -43,7 +43,7 @@ app.use(
       on : {
         proxyReq: (proxyReq, req, res) => {
           proxyReq.setHeader('Origin', 'https://www.blibli.com')
-          proxyReq.setHeader("Referer", "");
+          proxyReq.setHeader("Host", "https://www.blibli.com");
         },
       },
       pathRewrite: {
