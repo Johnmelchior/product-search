@@ -15,6 +15,10 @@ app.use(
     proxyReqOptDecorator(proxyReqOpts) {
       proxyReqOpts.headers["Origin"] = "https://www.blibli.com";
       return proxyReqOpts;
+    },
+    proxyErrorHandler: function(err, res, next) {
+      console.log("Proxy err", err);
+      next(err);
     }
   })
 )
