@@ -40,23 +40,34 @@ app.use((req, res, next) => {
   next();
 });
 
+var cookie;
+function relayRequestHeaders(proxyReq, req) {
+  proxyReq.setHeader('Origin', 'https://www.blibli.com');
+  if (cookie) {
+    proxyReq.setHeader('cookie', cookie);
+  }
+};
+
+function relayResponseHeaders(proxyRes, req, res) {
+  var proxyCookie = proxyRes.headers["set-cookie"];
+  if (proxyCookie) {
+    cookie = proxyCookie;
+  }
+};
+
 app.use(
   createProxyMiddleware(
     '/service/blibliserver',
     {
       target: 'https://www.blibli.com',
-      headers: {authority: 'www.blibli.com', referer: ''},
-      // on : {
-      //   proxyReq: (proxyReq, req, res) => {
-      //     proxyReq.setHeader('Origin', 'https://www.blibli.com');
-      //   },
-      // },
       pathRewrite: {
         '^/service/blibliserver': '', // rewrite path
       },
       changeOrigin: true,
-      logger: console,
-      secure: false
+      cookieDomainRewrite: 'localhost',
+      logLevel: "debug",
+      onProxyReq: relayRequestHeaders,
+      onProxyRes: relayResponseHeaders
     }
   )
 );

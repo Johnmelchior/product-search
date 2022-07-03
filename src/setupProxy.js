@@ -1,6 +1,22 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function (app) {
+
+  var cookie;
+  function relayRequestHeaders(proxyReq, req) {
+    proxyReq.setHeader('Origin', 'https://www.blibli.com');
+    if (cookie) {
+      proxyReq.setHeader('cookie', cookie);
+    }
+  };
+
+  function relayResponseHeaders(proxyRes, req, res) {
+    var proxyCookie = proxyRes.headers["set-cookie"];
+    if (proxyCookie) {
+      cookie = proxyCookie;
+    }
+  };
+
   app.use(
     createProxyMiddleware(
       '/service/blibliserver',
@@ -10,7 +26,10 @@ module.exports = function (app) {
           '^/service/blibliserver': '', // rewrite path
         },
         changeOrigin: true,
-        secure: false
+        cookieDomainRewrite: 'localhost',
+        logLevel: "debug",
+        onProxyReq: relayRequestHeaders,
+        onProxyRes: relayResponseHeaders
       }
     )
   );
