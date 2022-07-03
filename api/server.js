@@ -46,11 +46,11 @@ app.use(
     {
       target: 'https://www.blibli.com',
       headers: {authority: 'www.blibli.com', referer: ''},
-      on : {
-        proxyReq: (proxyReq, req, res) => {
-          proxyReq.setHeader('Origin', 'https://www.blibli.com');
-        },
-      },
+      // on : {
+      //   proxyReq: (proxyReq, req, res) => {
+      //     proxyReq.setHeader('Origin', 'https://www.blibli.com');
+      //   },
+      // },
       pathRewrite: {
         '^/service/blibliserver': '', // rewrite path
       },
