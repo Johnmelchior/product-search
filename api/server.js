@@ -1,5 +1,6 @@
 const proxy = require("express-http-proxy");
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const session = require('express-session');
 
 const express = require('express'),
   path = require('path'),
@@ -12,6 +13,7 @@ const origin = process.env.ORIGIN || "*";
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../build')));
+app.set("trust proxy", 1);
 
 /*app.use(
   "/service/blibliserver",
@@ -37,8 +39,22 @@ app.use(express.static(path.join(__dirname, '../build')));
 });*/
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", origin);
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Methods", "*");
   next();
 });
+
+app.use(
+  session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+      sameSite: 'none', // must be 'none' to enable cross-site delivery
+      secure: true, // must be true if sameSite='none'
+    }
+  })
+);
 
 var cookie;
 function relayRequestHeaders(proxyReq, req) {
