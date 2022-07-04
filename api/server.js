@@ -47,12 +47,10 @@ app.use((req, res, next) => {
 app.use(
   session({
     secret: 'sacredheart',
-    resave: true,
-    saveUninitialized: false,
     proxy: true,
     cookie: {
-      sameSite: 'none', // must be 'none' to enable cross-site delivery
-      secure: true, // must be true if sameSite='none'
+      secure: true,
+      maxAge: 5184000000
     }
   })
 );
