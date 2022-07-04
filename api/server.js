@@ -48,6 +48,7 @@ app.use(
   session({
     secret: 'sacredheart',
     proxy: true,
+    key: 'sid',
     cookie: {
       secure: true,
       maxAge: 5184000000
