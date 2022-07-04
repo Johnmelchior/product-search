@@ -13,7 +13,7 @@ const origin = process.env.ORIGIN || "*";
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../build')));
-app.set("trust proxy", 1);
+app.enable("trust proxy");
 
 /*app.use(
   "/service/blibliserver",
@@ -46,9 +46,10 @@ app.use((req, res, next) => {
 
 app.use(
   session({
-    secret: 'secret',
+    secret: 'sacredheart',
     resave: true,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
       sameSite: 'none', // must be 'none' to enable cross-site delivery
       secure: true, // must be true if sameSite='none'
